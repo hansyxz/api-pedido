@@ -4,6 +4,8 @@ import com.hansel.pedido.cliente.ProdutoClient;
 import com.hansel.pedido.dto.PedidoRequestDTO;
 import com.hansel.pedido.dto.PedidoResponseDTO;
 import com.hansel.pedido.dto.ProdutoResponseDTO;
+import com.hansel.pedido.model.Pedido;
+import com.hansel.pedido.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,24 +13,33 @@ import java.math.BigDecimal;
 @Service
 public class PedidoService {
 
-    private ProdutoClient produtoClient;
+    private final ProdutoClient produtoClient;
+    private final PedidoRepository pedidoRepository;
 
-    public PedidoService(ProdutoClient produtoClient) {
+    public PedidoService(ProdutoClient produtoClient, PedidoRepository pedidoRepository) {
         this.produtoClient = produtoClient;
+        this.pedidoRepository = pedidoRepository;
     }
 
-    public PedidoResponseDTO criarPedido(PedidoRequestDTO dto) {
-        ProdutoResponseDTO produto = produtoClient.buscarProdutoPorId(dto.getProdutoId());
+    public PedidoResponseDTO criarPedido(PedidoRequestDTO resquest) {
+        ProdutoResponseDTO produto = produtoClient.buscarProdutoPorId(resquest.getProdutoId());
 
-        BigDecimal total = produto.getPreco().multiply(BigDecimal.valueOf(dto.getQuantidade()));
-
-        return new PedidoResponseDTO(
-                null,
+        Pedido pedido = new Pedido(
                 produto.getId(),
                 produto.getNome(),
                 produto.getPreco(),
-                dto.getQuantidade(),
-                total
+                resquest.getQuantidade()
+        );
+
+        Pedido salvo = pedidoRepository.save(pedido);
+
+        return new PedidoResponseDTO(
+                salvo.getId(),
+                salvo.getProdutoId(),
+                salvo.getProdutoNome(),
+                salvo.getProdutoPreco(),
+                salvo.getQuantidade(),
+                salvo.getTotal()
         );
     }
 }

@@ -1,9 +1,19 @@
 package com.hansel.pedido.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.math.BigDecimal;
 
+@Entity
 public class Pedido {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long produtoId;
     private String produtoNome;
     private BigDecimal produtoPreco;
@@ -12,8 +22,7 @@ public class Pedido {
 
     public Pedido() {};
 
-    public Pedido (Long id, Long produtoId, String produtoNome, BigDecimal produtoPreco, int quantidade) {
-        this.id = id;
+    public Pedido (Long produtoId, String produtoNome, BigDecimal produtoPreco, int quantidade) {
         this.produtoId = produtoId;
         this.produtoNome = produtoNome;
         this.produtoPreco = produtoPreco;
