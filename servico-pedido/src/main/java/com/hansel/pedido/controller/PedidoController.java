@@ -1,35 +1,26 @@
 package com.hansel.pedido.controller;
 
-import com.hansel.pedido.cliente.ProdutoClient;
-import com.hansel.pedido.dto.ProdutoResponseDTO;
-import com.hansel.pedido.model.Pedido;
+import com.hansel.pedido.dto.PedidoRequestDTO;
+import com.hansel.pedido.dto.PedidoResponseDTO;
+import com.hansel.pedido.service.PedidoService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/pedidos")
 public class PedidoController {
 
-    private final ProdutoClient produtoClient;
+    private final PedidoService pedidoService;
 
-    public PedidoController(ProdutoClient produtoClient) {
-        this.produtoClient = produtoClient;
+    public PedidoController(PedidoService pedidoService) {
+        this.pedidoService = pedidoService;
     }
 
     @PostMapping
-    public ResponseEntity<Pedido> criar(@RequestParam Long produtoId, @RequestParam int quantidade) {
-        ProdutoResponseDTO produto = produtoClient.buscarProdutoPorId(produtoId);
+    public ResponseEntity<PedidoResponseDTO> criar(@Valid @RequestBody PedidoRequestDTO pedidoRequestDTO) {
+        PedidoResponseDTO pedidoCriado = pedidoService.criarPedido(pedidoRequestDTO);
 
-        Pedido pedido =  new Pedido(
-                null,
-                produto.getId(),
-                produto.getNome(),
-                produto.getPreco(),
-                quantidade
-        );
-        return ResponseEntity.ok(pedido);
+        return ResponseEntity.ok(pedidoCriado);
     }
 }
