@@ -8,7 +8,8 @@ import com.hansel.pedido.model.Pedido;
 import com.hansel.pedido.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PedidoService {
@@ -33,13 +34,29 @@ public class PedidoService {
 
         Pedido salvo = pedidoRepository.save(pedido);
 
+        return converterParaDTO(salvo);
+    }
+
+    public Optional<PedidoResponseDTO> buscarPorId(Long id) {
+        return pedidoRepository.findById(id)
+                .map(this::converterParaDTO);
+    }
+
+    public List<PedidoResponseDTO> listarTodos() {
+        return pedidoRepository.findAll()
+                .stream()
+                .map(this::converterParaDTO)
+                .toList();
+    }
+
+    private PedidoResponseDTO converterParaDTO(Pedido pedido) {
         return new PedidoResponseDTO(
-                salvo.getId(),
-                salvo.getProdutoId(),
-                salvo.getProdutoNome(),
-                salvo.getProdutoPreco(),
-                salvo.getQuantidade(),
-                salvo.getTotal()
+                pedido.getId(),
+                pedido.getProdutoId(),
+                pedido.getProdutoNome(),
+                pedido.getProdutoPreco(),
+                pedido.getQuantidade(),
+                pedido.getTotal()
         );
     }
 }

@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/pedidos")
 public class PedidoController {
@@ -22,5 +24,19 @@ public class PedidoController {
         PedidoResponseDTO pedidoCriado = pedidoService.criarPedido(pedidoRequestDTO);
 
         return ResponseEntity.ok(pedidoCriado);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PedidoResponseDTO> buscarPorId(@PathVariable Long id) {
+        return pedidoService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PedidoResponseDTO>> listarTodos() {
+        List<PedidoResponseDTO> pedidos = pedidoService.listarTodos();
+
+        return ResponseEntity.ok(pedidos);
     }
 }
