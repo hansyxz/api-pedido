@@ -3,17 +3,16 @@ package com.hansel.pedido.dto;
 import java.math.BigDecimal;
 
 public class PedidoResponseDTO {
-    private Long id;
-    private String produtoNome;
-    private BigDecimal produtoPreco;
-    private int quantidade;
-    private BigDecimal total;
+    private final Long id;
+    private final Long produtoId;
+    private final String produtoNome;
+    private final BigDecimal produtoPreco;
+    private final int quantidade;
+    private final BigDecimal total;
 
-    public PedidoResponseDTO() {
-    }
-
-    public PedidoResponseDTO(Long id, String produtoNome, BigDecimal produtoPreco, int quantidade, BigDecimal total) {
+    public PedidoResponseDTO(Long id, Long produtoId, String produtoNome, BigDecimal produtoPreco, int quantidade, BigDecimal total) {
         this.id = id;
+        this.produtoId = produtoId;
         this.produtoNome = produtoNome;
         this.produtoPreco = produtoPreco;
         this.quantidade = quantidade;
@@ -22,6 +21,10 @@ public class PedidoResponseDTO {
 
     public Long getId() {
         return id;
+    }
+
+    public Long getProdutoId() {
+        return produtoId;
     }
 
     public String getProdutoNome() {
