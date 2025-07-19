@@ -20,7 +20,7 @@ public class Pedido {
     private int quantidade;
     private BigDecimal total;
 
-    public Pedido() {};
+    public Pedido() {}
 
     public Pedido (Long produtoId, String produtoNome, BigDecimal produtoPreco, int quantidade) {
         this.produtoId = produtoId;
