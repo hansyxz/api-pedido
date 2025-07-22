@@ -45,4 +45,18 @@ public class PedidoController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Atualiza um pedidp")
+    public ResponseEntity<PedidoResponseDTO> atualizar(@PathVariable Long id, @Valid @RequestBody PedidoRequestDTO request) {
+        return pedidoService.atualizarPedido(id, request)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deleta um pedidp")
+    public ResponseEntity<Object> deletar(@PathVariable Long id) {
+        return pedidoService.deletarPedido(id);
+    }
 }

@@ -6,8 +6,10 @@ import com.hansel.pedido.dto.PedidoResponseDTO;
 import com.hansel.pedido.dto.ProdutoResponseDTO;
 import com.hansel.pedido.model.Pedido;
 import com.hansel.pedido.repository.PedidoRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +49,27 @@ public class PedidoService {
                 .stream()
                 .map(this::converterParaDTO)
                 .toList();
+    }
+
+    public Optional<PedidoResponseDTO> atualizarPedido(Long id, PedidoRequestDTO resquest) {
+        return pedidoRepository.findById(id)
+                .map(pedido -> {
+                    pedido.setProdutoId(resquest.getProdutoId());
+                    pedido.setQuantidade(resquest.getQuantidade());
+
+                    Pedido atualizado = pedidoRepository.save(pedido);
+
+                    return converterParaDTO(atualizado);
+                });
+    }
+
+    public ResponseEntity<Object> deletarPedido(Long id) {
+        return pedidoRepository.findById(id)
+                .map(pedido -> {
+                    pedidoRepository.delete(pedido);
+                    return ResponseEntity.noContent().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     private PedidoResponseDTO converterParaDTO(Pedido pedido) {
